@@ -68,13 +68,13 @@ html(lang='ja')
 			li
 				h4 Gulpの場合は、「gulp-replace」
 				p TransferStreamとして、組み込めば良い。
-				p Unicodeに詳しくないため、適切かどうかは定かではないが、ざっくり以下のような正規表現を使ったコードになる。
+				p Unicodeに詳しくないため、適切かどうかは定かではないが、ざっくり以下のような正規表現を使ったコードになる。（下記は、垂直タブの他に、ゼロ幅スペースも含む）
 				.code
 					| return gulp.src(config.tasks.pug.src)
 					br
 					| 	.pipe($.pug(config.tasks.pug.options))
 					br
-					span.color-red 	.pipe($.replace(/[\u0000-\u001F\u200B-\u200D\uFEFF]/g, ''))
+					span.color-red 	.pipe($.replace(/[\u000B\u200A-\u200D\uFEFF]/g, ''))
 					br
 					| 	.pipe(gulp.dest(config.tasks.pug.dest))
 				a(href="https://www.npmjs.com/package/gulp-replace" target="_blank") Usage 

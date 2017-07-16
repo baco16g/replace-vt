@@ -1,1 +1,82 @@
-<!DOCTYPE html><html lang="ja">  <head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta http-equiv="X-UA-Compatible" content="ie=edge">    <link rel="stylesheet" href="/assets/css/common.css">    <title>Document</title>  </head>  <body>    <h1>Strip Unicode String with gulp-replace</h1>    <h2>Outline</h2>    <hr>    <h3>経緯</h3>    <p>PowerPointやPDF内の文字列をコピー＆ペーストしようとしたら、貼りつけた際に文字化けしてしまう場合がある。</p>    <p>具体的な原因は、「垂直タブ」である。</p>    <hr>    <h3>「垂直タブ」とは？</h3>    <p>PowerPointにおけるEnterは、次の段落に移動する。</p>    <p>一方、Shift+Enterでは、段落を変えずに改行する。</p>    <p>それぞれ、挿入される改行コードが異なる。</p>    <table>      <thead>        <tr>          <th>改行操作</th>          <th>文字コード</th>          <th>改行コード</th>        </tr>      </thead>      <tbody>        <tr>          <th>Enter</th>          <td>13</td>          <td>CR</td>        </tr>        <tr>          <th>Shift+Enter</th>          <td>11</td>          <td>VT</td>        </tr>      </tbody>    </table>    <p>引用：<a href="http://blog.sbe.tokyo/20170407/842/" target="_blank">[Excel][PPT][VBA] エクセルとパワーポイントの改行コードの違い</a></p><br>    <p>そして、ブラウザのバージョンによって、この「垂直タブ」のような制御文字の扱い方が異なる。</p>    <p>例えば、垂直タブは、「♂」やZero Width Space等で表示されることもあれば、見た目上問題ないこともある。</p>    <p>以下、垂直タブやゼロ幅スペースの例。</p>    <table>      <thead>        <th>スペース無し</th>        <th>ゼロ幅スペース</th>        <th>半角スペース</th>        <th>垂直タブ</th>      </thead>      <tbody>        <td>あいうえお</td>        <td>あいうえお</td>        <td>あ い う え お</td>        <td>あいうえお</td>      </tbody>    </table>    <p>引用：<a href="http://azuma006.hatenablog.com/entry/2015/06/07/232712" target="_blank">JavaScriptで特殊文字を削除</a></p>    <hr>    <h3>解決方法</h3>    <p>巷には様々な解決策が挙げられているが、時間的コストが発生するものばかり。可能であれば、常用しているエディタで解決させたい。</p>    <h4>replace系のパッケージを使う</h4>    <p>表示不要なUnicodeは、コンパイルの時点でHTMLファイルから取り除いておくのが吉。</p>    <p><a href="https://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF" target="_blank">Unicodeリスト</a></p>    <p><a href="https://ja.wikipedia.org/wiki/%E5%88%B6%E5%BE%A1%E6%96%87%E5%AD%97#ASCII" target="_blank">制御文字リスト</a></p>    <ul>       <li>        <h4>Gulpの場合は、「gulp-replace」</h4>        <p>TransferStreamとして、組み込めば良い。</p>        <p>Unicodeに詳しくないため、適切かどうかは定かではないが、ざっくり以下のような正規表現を使ったコードになる。</p>        <div class="code">return gulp.src(config.tasks.pug.src)<br>.pipe($.pug(config.tasks.pug.options))<br><span class="color-red">.pipe($.replace(/[\u0000-\u001F\u200B-\u200D\uFEFF]/g, ''))</span><br>.pipe(gulp.dest(config.tasks.pug.dest))</div><a href="https://www.npmjs.com/package/gulp-replace" target="_blank">Usage </a>      </li>      <li>        <h4>html-webpack-pluginの場合は、「html-string-replace-webpack-plugin」</h4>        <p>Gulpと同様の正規表現を使用する。</p><a href="https://www.npmjs.com/package/html-string-replace-webpack-plugin" target="_blank">Usage </a>      </li>    </ul>  </body></html>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Strip Unicode String with gulp-replace</h1>
+    <h2>Outline</h2>
+    <hr>
+    <h3>経緯</h3>
+    <p>PowerPointやPDF内の文字列をコピー＆ペーストしようとしたら、貼りつけた際に文字化けしてしまう場合がある。</p>
+    <p>具体的な原因は、「垂直タブ」である。</p>
+    <hr>
+    <h3>「垂直タブ」とは？</h3>
+    <p>PowerPointにおけるEnterは、次の段落に移動する。</p>
+    <p>一方、Shift+Enterでは、段落を変えずに改行する。</p>
+    <p>それぞれ、挿入される改行コードが異なる。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>改行操作</th>
+          <th>文字コード</th>
+          <th>改行コード</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Enter</th>
+          <td>13</td>
+          <td>CR</td>
+        </tr>
+        <tr>
+          <th>Shift+Enter</th>
+          <td>11</td>
+          <td>VT</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>引用：<a href="http://blog.sbe.tokyo/20170407/842/" target="_blank">[Excel][PPT][VBA] エクセルとパワーポイントの改行コードの違い</a></p><br>
+    <p>そして、ブラウザのバージョンによって、この「垂直タブ」のような制御文字の扱い方が異なる。</p>
+    <p>例えば、垂直タブは、「♂」やZero Width Space等で表示されることもあれば、見た目上問題ないこともある。</p>
+    <p>以下、垂直タブやゼロ幅スペースの例。</p>
+    <table>
+      <thead>
+        <th>スペース無し</th>
+        <th>ゼロ幅スペース</th>
+        <th>半角スペース</th>
+        <th>垂直タブ</th>
+      </thead>
+      <tbody>
+        <td>あいうえお</td>
+        <td>あいうえお</td>
+        <td>あ い う え お</td>
+        <td>あいうえお</td>
+      </tbody>
+    </table>
+    <p>引用：<a href="http://azuma006.hatenablog.com/entry/2015/06/07/232712" target="_blank">JavaScriptで特殊文字を削除</a></p>
+    <hr>
+    <h3>解決方法</h3>
+    <p>巷には様々な解決策が挙げられているが、時間的コストが発生するものばかり。可能であれば、常用しているエディタで解決させたい。</p>
+    <h4>replace系のパッケージを使う</h4>
+    <p>表示不要なUnicodeは、コンパイルの時点でHTMLファイルから取り除いておくのが吉。</p>
+    <p><a href="https://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF" target="_blank">Unicodeリスト</a></p>
+    <p><a href="https://ja.wikipedia.org/wiki/%E5%88%B6%E5%BE%A1%E6%96%87%E5%AD%97#ASCII" target="_blank">制御文字リスト</a></p>
+    <ul> 
+      <li>
+        <h4>Gulpの場合は、「gulp-replace」</h4>
+        <p>TransferStreamとして、組み込めば良い。</p>
+        <p>Unicodeに詳しくないため、適切かどうかは定かではないが、ざっくり以下のような正規表現を使ったコードになる。（下記は、垂直タブの他に、ゼロ幅スペースも含む）</p>
+        <div class="code">return gulp.src(config.tasks.pug.src)<br>	.pipe($.pug(config.tasks.pug.options))<br><span class="color-red">	.pipe($.replace(/[\u000B\u200A-\u200D\uFEFF]/g, ''))</span><br>	.pipe(gulp.dest(config.tasks.pug.dest))</div><a href="https://www.npmjs.com/package/gulp-replace" target="_blank">Usage </a>
+      </li>
+      <li>
+        <h4>html-webpack-pluginの場合は、「html-string-replace-webpack-plugin」</h4>
+        <p>Gulpと同様の正規表現を使用する。</p><a href="https://www.npmjs.com/package/html-string-replace-webpack-plugin" target="_blank">Usage </a>
+      </li>
+    </ul>
+  </body>
+</html>

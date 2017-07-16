@@ -20,7 +20,7 @@ function pug() {
 	return gulp.src(config.tasks.pug.src)
 	.pipe($.plumber({ errorHandler: $.notify.onError('<%= error.message %>') }))
 	.pipe($.pug(config.tasks.pug.options))
-	// .pipe($.replace(/[\u0000-\u001F\u200A-\u200D\uFEFF]/g, ''))
+	.pipe($.replace(/[\u000B\u200A-\u200D\uFEFF]/g, ''))
 	.pipe(gulp.dest(config.tasks.pug.dest))
 	.pipe(reload({ stream: true }));
 }
