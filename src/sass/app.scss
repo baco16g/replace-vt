@@ -1,0 +1,51 @@
+// =========================================================
+// =========================================================
+// Foundation
+// =========================================================
+// @import "foundation/sanitize";
+// @import "foundation/font";
+// @import "foundation/base";
+
+
+.code {
+	padding: 10px;
+	border-left: solid 5px #000;
+	margin-bottom: 10px;
+}
+
+.color-red {
+	color: red;
+}
+
+table {
+	width: 600px;
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	border: 1px solid #ccc;
+}
+table thead {
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	background: #04162e;
+}
+table thead th {
+	padding: 10px;
+	font-weight: bold;
+	vertical-align: top;
+	color: #fff;
+}
+table tbody th {
+	width: 150px;
+	padding: 10px;
+	font-weight: bold;
+	vertical-align: top;
+	border-bottom: 1px solid #ccc;
+	background: #efefef;
+}
+table td {
+	width: 350px;
+	padding: 10px;
+	vertical-align: top;
+	border-bottom: 1px solid #ccc;
+}

@@ -1,0 +1,85 @@
+doctype html
+html(lang='ja')
+	head
+		meta(charset='UTF-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		meta(http-equiv='X-UA-Compatible', content='ie=edge')
+		link(rel="stylesheet" href="/assets/css/common.css")
+		title Document
+	body
+		h1 Strip Unicode String with gulp-replace
+		h2 Outline
+		hr
+		h3 経緯
+		p PowerPointやPDF内の文字列をコピー＆ペーストしようとしたら、貼りつけた際に文字化けしてしまう場合がある。
+		p 具体的な原因は、「垂直タブ」である。
+		hr
+		h3 「垂直タブ」とは？
+		p PowerPointにおけるEnterは、次の段落に移動する。
+		p 一方、Shift+Enterでは、段落を変えずに改行する。
+		p それぞれ、挿入される改行コードが異なる。
+		table
+			thead
+				tr
+					th 改行操作
+					th 文字コード
+					th 改行コード
+			tbody
+				tr
+					th Enter
+					td 13
+					td CR
+				tr
+					th Shift+Enter
+					td 11
+					td VT
+		p 引用：
+			a(href="http://blog.sbe.tokyo/20170407/842/" target="_blank") [Excel][PPT][VBA] エクセルとパワーポイントの改行コードの違い
+		br
+		p そして、ブラウザのバージョンによって、この「垂直タブ」のような制御文字の扱い方が異なる。
+		p 例えば、垂直タブは、「♂」やZero Width Space等で表示されることもあれば、見た目上問題ないこともある。
+		p 以下、垂直タブやゼロ幅スペースの例。
+
+		table
+			thead
+				th スペース無し
+				th ゼロ幅スペース
+				th 半角スペース
+				th 垂直タブ
+			tbody
+				td あいうえお
+				td あ​い​う​え​お
+				td あ い う え お
+				td あいうえお
+
+		p 引用：
+			a(href="http://azuma006.hatenablog.com/entry/2015/06/07/232712" target="_blank") JavaScriptで特殊文字を削除
+
+		hr
+		h3 解決方法
+		p 巷には様々な解決策が挙げられているが、時間的コストが発生するものばかり。可能であれば、常用しているエディタで解決させたい。
+		h4 replace系のパッケージを使う
+		p 表示不要なUnicodeは、コンパイルの時点でHTMLファイルから取り除いておくのが吉。
+		p
+			a(href="https://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF" target="_blank") Unicodeリスト
+		p
+			a(href="https://ja.wikipedia.org/wiki/%E5%88%B6%E5%BE%A1%E6%96%87%E5%AD%97#ASCII" target="_blank") 制御文字リスト
+		ul 
+			li
+				h4 Gulpの場合は、「gulp-replace」
+				p TransferStreamとして、組み込めば良い。
+				p Unicodeに詳しくないため、適切かどうかは定かではないが、ざっくり以下のような正規表現を使ったコードになる。
+				.code
+					| return gulp.src(config.tasks.pug.src)
+					br
+					| 	.pipe($.pug(config.tasks.pug.options))
+					br
+					span.color-red 	.pipe($.replace(/[\u0000-\u001F\u200B-\u200D\uFEFF]/g, ''))
+					br
+					| 	.pipe(gulp.dest(config.tasks.pug.dest))
+				a(href="https://www.npmjs.com/package/gulp-replace" target="_blank") Usage 
+			li
+				h4 html-webpack-pluginの場合は、「html-string-replace-webpack-plugin」
+				p Gulpと同様の正規表現を使用する。
+				a(href="https://www.npmjs.com/package/html-string-replace-webpack-plugin" target="_blank") Usage 
+
