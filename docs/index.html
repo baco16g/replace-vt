@@ -8,7 +8,7 @@
     <title>Strip Unicode String with gulp-replace</title>
   </head>
   <body>
-    <h1>Strip Unicode String with gulp-replace</h1>
+    <h1>Strip Unicode String off HTML with gulp-replace or html-string-replace-webpack-plugin</h1>
     <h2>Outline</h2>
     <hr>
     <h3>経緯</h3>
@@ -53,9 +53,9 @@
       </thead>
       <tbody>
         <td>あいうえお</td>
-        <td>あいうえお</td>
+        <td>あ​い​う​え​お</td>
         <td>あ い う え お</td>
-        <td>あいうえお</td>
+        <td>あいうえお</td>
       </tbody>
     </table>
     <p>引用：<a href="http://azuma006.hatenablog.com/entry/2015/06/07/232712" target="_blank">JavaScriptで特殊文字を削除</a></p>
@@ -66,16 +66,16 @@
     <p>表示不要なUnicodeは、コンパイルの時点でHTMLファイルから取り除いておくのが吉。</p>
     <p><a href="https://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF" target="_blank">Unicodeリスト</a></p>
     <p><a href="https://ja.wikipedia.org/wiki/%E5%88%B6%E5%BE%A1%E6%96%87%E5%AD%97#ASCII" target="_blank">制御文字リスト</a></p>
-    <ul> 
+    <ul>
       <li>
         <h4>Gulpの場合は、「gulp-replace」</h4>
         <p>TransferStreamとして、組み込めば良い。</p>
         <p>Unicodeに詳しくないため、適切かどうかは定かではないが、ざっくり以下のような正規表現を使ったコードになる。（下記は、垂直タブの他に、ゼロ幅スペースも含む）</p>
-        <div class="code">return gulp.src(config.tasks.pug.src)<br>	.pipe($.pug(config.tasks.pug.options))<br><span class="color-red">	.pipe($.replace(/[\u000B\u200A-\u200D\uFEFF]/g, ''))</span><br>	.pipe(gulp.dest(config.tasks.pug.dest))</div><a href="https://www.npmjs.com/package/gulp-replace" target="_blank">Usage </a>
+        <div class="code">return gulp.src(config.tasks.pug.src)<br>	.pipe($.pug(config.tasks.pug.options))<br><span class="color-red">	.pipe($.replace(/[\u000B\u200A-\u200D\uFEFF]/g, ''))</span><br>	.pipe(gulp.dest(config.tasks.pug.dest))</div><a href="https://www.npmjs.com/package/gulp-replace" target="_blank">Usage</a>
       </li>
       <li>
         <h4>html-webpack-pluginの場合は、「html-string-replace-webpack-plugin」</h4>
-        <p>Gulpと同様の正規表現を使用する。</p><a href="https://www.npmjs.com/package/html-string-replace-webpack-plugin" target="_blank">Usage </a>
+        <p>Gulpと同様の正規表現を使用する。</p><a href="https://www.npmjs.com/package/html-string-replace-webpack-plugin" target="_blank">Usage</a>
       </li>
     </ul>
   </body>

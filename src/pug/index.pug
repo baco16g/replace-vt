@@ -8,7 +8,7 @@ html(lang='ja')
 		title Strip Unicode String with gulp-replace
 
 	body
-		h1 Strip Unicode String with gulp-replace
+		h1 Strip Unicode String off HTML with gulp-replace or html-string-replace-webpack-plugin
 		h2 Outline
 		hr
 		h3 経緯
@@ -65,7 +65,7 @@ html(lang='ja')
 			a(href="https://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF" target="_blank") Unicodeリスト
 		p
 			a(href="https://ja.wikipedia.org/wiki/%E5%88%B6%E5%BE%A1%E6%96%87%E5%AD%97#ASCII" target="_blank") 制御文字リスト
-		ul 
+		ul
 			li
 				h4 Gulpの場合は、「gulp-replace」
 				p TransferStreamとして、組み込めば良い。
@@ -78,9 +78,8 @@ html(lang='ja')
 					span.color-red 	.pipe($.replace(/[\u000B\u200A-\u200D\uFEFF]/g, ''))
 					br
 					| 	.pipe(gulp.dest(config.tasks.pug.dest))
-				a(href="https://www.npmjs.com/package/gulp-replace" target="_blank") Usage 
+				a(href="https://www.npmjs.com/package/gulp-replace" target="_blank") Usage
 			li
 				h4 html-webpack-pluginの場合は、「html-string-replace-webpack-plugin」
 				p Gulpと同様の正規表現を使用する。
-				a(href="https://www.npmjs.com/package/html-string-replace-webpack-plugin" target="_blank") Usage 
-
+				a(href="https://www.npmjs.com/package/html-string-replace-webpack-plugin" target="_blank") Usage
